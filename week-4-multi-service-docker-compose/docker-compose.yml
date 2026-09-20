@@ -1,0 +1,42 @@
+services:
+
+  mysql:
+    image: mysql:8.0
+    container_name: shop-sync-week4-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: shopsyncroot
+      MYSQL_DATABASE: shop_sync
+      MYSQL_USER: shopsync
+      MYSQL_PASSWORD: ShopSync@123
+    ports:
+      - "3310:3306"
+    volumes:
+      - shop_sync_mysql_data:/var/lib/mysql
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-ushopsync", "-pShopSync@123"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: "C:/Users/sujee/Desktop/shop_sync/shop-sync-ui"
+      dockerfile: Dockerfile
+    container_name: shop-sync-week4-app
+    restart: unless-stopped
+    ports:
+      - "3010:3000"
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: shopsync
+      DB_PASSWORD: ShopSync@123
+      DB_DATABASE: shop_sync
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+volumes:
+  shop_sync_mysql_data:
