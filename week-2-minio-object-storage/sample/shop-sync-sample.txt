@@ -1,0 +1,13 @@
+Shop Sync - Grocery Management System
+
+This sample file is used to demonstrate object storage
+with MinIO as part of the cloud computing internship.
+
+Project:
+Shop Sync
+
+Technology:
+Next.js, React, Node.js, MySQL
+
+Object Storage:
+MinIO / S3-compatible storage
